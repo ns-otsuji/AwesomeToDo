@@ -1,0 +1,66 @@
+env:
+  contexts:
+  - name: http://127.0.0.1:8000
+    urls:
+    - http://127.0.0.1:8000
+    includePaths:
+    - http://127.0.0.1:8000.*
+    excludePaths:
+    - http://127.0.0.1:8000/favicon.ico
+    - http://127.0.0.1:8000/js.*
+    - http://127.0.0.1:8000/style.css
+    authentication:
+      verification:
+        method: response
+        pollFrequency: 60
+        pollUnits: requests
+        pollUrl: ""
+        pollPostData: ""
+    sessionManagement:
+      method: cookie
+    technology: {}
+    structure: {}
+  parameters: {}
+jobs:
+- type: passiveScan-config
+  parameters: {}
+- type: import
+  parameters:
+    type: har
+    fileName: /zap/wrk/tmp/AwesomeToDo.har
+- type: passiveScan-wait
+  parameters: {}
+- type: activeScan
+  parameters:
+    context: http://127.0.0.1:8000
+  policyDefinition:
+    defaultStrength: low
+    defaultThreshold: "off"
+- type: report
+  parameters:
+    template: modern
+    theme: corporate
+    reportDir: /zap/wrk/
+    reportFile: zap_report.html
+    reportTitle: Checkmarx による ZAP スキャンレポート
+  risks:
+  - info
+  - low
+  - medium
+  - high
+  confidences:
+  - falsepositive
+  - low
+  - medium
+  - high
+  - confirmed
+  sections:
+  - passingrules
+  - insights
+  - instancecount
+  - alertdetails
+  - alertcount
+  - params
+  - chart
+  - statistics
+
